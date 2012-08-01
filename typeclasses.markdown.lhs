@@ -64,6 +64,14 @@ What are typeclasses? Ad-hoc polymorphism.
 < square x = x * x
 
 - But `Numeric` is not a type!
+- We could write:
+
+< squareInt :: Int -> Int
+< squareInt x = x `timesInt` x
+<
+< squareDouble :: Double -> Double
+< squareDouble x = x `timesDouble` x
+
 - We want `Numeric` to be the collection of types that implement `(*)`
 
 < (*) :: Numeric -> Numeric -> Numeric
@@ -93,6 +101,16 @@ Typeclasses to the rescue
 
 - From the documentation: "Minimal complete definition: all except `negate` or `(-)`"
 - `(-)` and `negate` have default implementations
+
+Instances:
+
+< Num Int
+< Num Double
+< Integral a => Num (Ratio a)
+
+`Num` class features
+-
+
 - The `Num` class also gives us overloaded numeral parsing
     - `10`, `0` or `42` in Haskell source is translated to `fromInteger 10`, `fromInteger 0` or `fromInteger 42` respectively
 
@@ -141,6 +159,8 @@ data Nat = Z | S Nat
   deriving (Show)
 \end{code}
 
+- We'll derive `Show` for debugging purposes
+
 `Num Nat` instance
 -
 
@@ -176,7 +196,11 @@ instance Num Nat where
 A well defined `Num Nat` instance
 -
 
-We need to prove: `abs x * signum x = x`
+From the documentation of `Nat`:
+
+The functions 'abs' and 'signum' should satisfy the law:
+
+< abs x * signum x == x
 
 By induction on `x`
 
@@ -323,7 +347,7 @@ A better way to do things
 
 It's common that a `Num` type has multiple valid `Monoid` instances
 
-In `Data.Monoid`
+In `Data.Monoid`:
 
 < -- | Monoid under addition.
 < newtype Sum a = Sum { getSum :: a }
