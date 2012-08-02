@@ -334,7 +334,7 @@ data NatProduct :: * where
 newtype NatProduct = NatProduct Nat
 
 instance Monoid NatProduct where
-  mempty = NatProduct Z
+  mempty = NatProduct (S Z)
   mappend (NatProduct x) (NatProduct y) = NatProduct (x * y)
 \end{code}
 
