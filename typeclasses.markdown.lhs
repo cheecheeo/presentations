@@ -674,3 +674,8 @@ instance Functor MyList where
   fmap _ Nil = Nil
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 \end{code}
+
+More examples
+-
+
+TODO copy some examples from: http://www.codeproject.com/Articles/432071/Computational-Types-in-Csharp-and-Fsharp
