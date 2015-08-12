@@ -2,53 +2,38 @@
 % John Chee
 % @chee1bot on Twitter | @cheecheeo on Github
 
-Literate Haskell
+Some libraries that we'll be using for this presentation
 -
-
-The source for this presentation can be parsed, type checked and run by GHC.
-
-- The name of this module is `JustHaskellOrNothing`
 
 \begin{code}
 module JustHaskellOrNothing where
 
 import Control.Applicative
-import Data.Monoid
 import Data.Maybe
+import Data.Monoid
 \end{code}
+
+<center>![Donald Knuth](./dek-14May10-2-resize.jpeg)</center>
 
 Outline
 -
 
 - Maybe in action
-    - nulled types
-    - possibly-failed computations
-    - parsing
-    - Opt in - always going to get that value ignoring program divergence
-
 - Maybe itself
-  - definition & usage
-  - case statement
-  - maybe combinator
-    - there's a good reason to prefer this method
-      - can you think of any?
-      - always cover all cases
-      - some structures want to hide this information so that they can have more freedom in concrete implementation
-
-- Functions using Maybe
-  - Div by zero
-  - Subtract on naturals: caution... Representing negative input and negative results with the same value might not be enough
-  - parseing phone numbers
-
-- Combinators
-  - maybe
-  - I know what to do with Nulls
-    - fromMaybe
-  - catMaybes
-  - mapMaybe
-  - This is enough for a large number of useful programs
-
-Functor applicative
+    - Definition & usage
+    - Examples
+    - Some functions that construct Maybes
+    - Parsing North American phone numbers
+    - Destructing or eliminating values
+- More tools to deal with Maybes
+    - Here, have a default
+    - Another way to think of Maybes
+    - Dealing with collections of Maybes
+- Opening up the Typeclassopedia
+    - fmappable things AKA Functor instances
+    - Applicative instance
+    - liftAn
+- Further Study
 
 Maybe in action
 =
@@ -121,6 +106,8 @@ Examples
 - `Bool`s
 - `Maybe Bool`s
 
+. . .
+
 < λ: [0..5]
 < [0,1,2,3,4,5]
 
@@ -158,7 +145,8 @@ Parsing North American phone numbers
 In this case a phone number that isn't valid maps to Nothing.
 
 \begin{code}
-data PhoneNumber  = PhoneNumber Integer Integer Integer
+data PhoneNumber = PhoneNumber Integer Integer Integer
+  deriving (Show)
 
 parsePhoneNumber :: Integer -> Maybe PhoneNumber
 parsePhoneNumber n =
@@ -170,6 +158,19 @@ parsePhoneNumber n =
               else Nothing
     else Nothing
 \end{code}
+
+. . .
+
+Examples:
+
+< λ: parsePhoneNumber 1234567890
+< Nothing
+< λ: parsePhoneNumber 4155551234
+< Just (PhoneNumber 415 555 1234)
+< λ: parsePhoneNumber 4159112277
+< Nothing
+< λ: parsePhoneNumber 4159128347
+< Just (PhoneNumber 415 912 8347)
 
 Destructing or eliminating values
 -
@@ -187,6 +188,13 @@ showMaybeInteger m =
     Just x  -> "I have something: " <> show x
 \end{code}
 
+. . .
+
+< λ: showMaybeInteger Nothing
+< "There's nothing here."
+< λ: showMaybeInteger (Just 42)
+< "I have something: 42"
+
 or eliminate:
 
 < maybe :: b -> (a -> b) -> Maybe a -> b
@@ -195,27 +203,24 @@ or eliminate:
 showMaybeInteger' :: Maybe Integer -> String
 showMaybeInteger' m =
   maybe
-    "There's nothing here."
-    (\x -> "I have something: " <> show x)
+    "There's nothing here."                -- Nothing
+    (\x -> "I have something: " <> show x) -- Just x
     m
 \end{code}
 
-< λ: showMaybeInteger Nothing
-< "There's nothing here."
-< λ: showMaybeInteger (Just 42)
-< "I have something: 42"
-
-- I can think of some good reasons to prefer `maybe` can you? (audience involvement)
+- I can think of some good reasons to prefer the `maybe` function can you? (audience involvement)
 
 Reasons to prefer `maybe`
 -
 
 < maybe :: b -> (a -> b) -> Maybe a -> b
 
-- always cover all cases
+- always cover all cases (without the compiler's help!)
 - information hiding
     - rename `Just` to `Some` or `Nothing` to `None`
         - This won't actually happen
+
+<center>![Eliminated](./bigstock-Eliminated-Red-Square-Grungy-S-66335674-583x388.jpg)</center>
 
 More tools to deal with `Maybe`s
 =
@@ -329,12 +334,9 @@ We can use `Maybe Phone` to represent those rare times when you forget your cell
 < λ: fmap text Nothing
 < Nothing
 
-Applicative
+`Applicative` instance
 -
 
-- `Maybe` is also an `Applicative` instance
-    - This means we can embed expressions in `Maybe`s using `Just`
-    - And combine `Maybe` computations using (<*>)
 - Let's make another function that uses both `Phone` and `PhoneNumber`
 
 \begin{code}
@@ -347,16 +349,24 @@ callWithPhone phone (PhoneNumber areaCode centralOfficeCode subscriberNumber) =
       Hipster -> "I called " <> prettyPhoneNumber <> " and asked for their Snapchat ID."
 \end{code}
 
-- We want to call someone but what if we have a `Maybe Phone` and a `Maybe PhoneNumber`?
+. . .
+
+- `Maybe` is also an `Applicative` instance
+    - This means we can embed expressions in `Maybe`s using `Just`
+    - And combine `Maybe` computations using (<*>)
+
+. . .
+
+ - We want to call someone but what if we have a `Maybe Phone` and a `Maybe PhoneNumber`?
     - Don't be afraid of the syntax
 
 < λ: (pure callWithPhone) <*> (pure Android) <*> (parsePhoneNumber 4155551234)
 < Just "Google knows I just called (415) 555 1234."
-< λ: (pure callWithPhone) <*> (pure IPhone) <*> (parsePhoneNumber 1234567890)
+< λ: (pure callWithPhone) <*> (pure IPhone)  <*> (parsePhoneNumber 1234567890)
 < Nothing
 < λ: (pure callWithPhone) <*> (pure Hipster) <*> (parsePhoneNumber 5035551234)
 < Just "I called (503) 555 1234 and asked for their Snapchat ID."
-< λ: (pure callWithPhone) <*> Nothing <*> (parsePhoneNumber 1234567890)
+< λ: (pure callWithPhone) <*> Nothing        <*> (parsePhoneNumber 1234567890)
 < Nothing
 
 Pop quiz
@@ -366,7 +376,11 @@ What about? (audience participation)
 
 < λ: Nothing <*> Nothing <*> Nothing
 
-You don't even need a function for `Applicative`
+. . .
+
+<center>![Mind blown](./mind_blown-resize.gif)</center>
+
+You don't even need a function for `Maybe`s `Applicative` instance
 -
 
 < λ: Nothing <*> Nothing <*> Nothing
@@ -404,6 +418,8 @@ Further Study
     - Enrich any `Monad` with `Maybe` semantics
 - [maybeT](http://hackage.haskell.org/package/errors-2.0.0/docs/Control-Error-Util.html#v:maybeT)
     - provides an eliminator for `MaybeT` values
+- [Either](http://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Either.html#t:Either)
+    - Like `Maybe` but allows you to hold data where you would have `Nothing`
 
 Questions or comments?
 -
