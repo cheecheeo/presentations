@@ -423,3 +423,6 @@ Further Study
 
 Questions or comments?
 -
+
+- Get the latest version of these slides: [https://cheecheeo.github.io/just_haskell_or_nothing.html](https://cheecheeo.github.io/just_haskell_or_nothing.html)
+- Download the source code for these slides: [just_haskell_or_nothing.markdown.lhs](https://raw.githubusercontent.com/cheecheeo/presentations/master/just_haskell_or_nothing.markdown.lhs)
