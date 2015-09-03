@@ -1,17 +1,44 @@
-% Flawless feature release at enterprise internet companies
-% John Chee
-% Software Engineer in San Francisco, CA | @chee1bot on Twitter
+% Flawless feature release at enterprise Internet companies
+% John Chee | @chee1bot
+% Twitter in San Francisco, CA
 
 What's the problem?
 -
 
-- We have a change (new feature or bugfix)
+> - We have a change (new feature or bugfix)
+>     - Faster page load times
+>     - 1-click purchasing
+>     - Streamlined account creation
+>     - Autoplay video
+>     - Autoplay video advertisements!
+> - We want every customer to have that change
+
+> <center>![Happy User](./happy_user.jpeg)</center>
+
+Operational Execution Excellence
+-
+
+> - Ideal customer impact
+> - The customer should only notice exactly what we want
 
 . . .
 
-- We want every customer to have that change
+- Ideally:
+    - No additional loading time
+    - No requirement to logout and login
 
-<center>![Happy User](./happy_user.jpeg)</center>
+. . .
+
+- At first we only want a fraction of customers to experience the change
+    - A/B testing
+    - Over time we want more and more customers to experience the change
+    - If there's a problem we need to instantly disable the change
+
+. . .
+
+- Continually released
+    - Daily
+    - Multiple times per day
 
 The easy solution
 -
@@ -49,7 +76,7 @@ Many applications are BIG now
 The refined problem
 -
 
-- Deliver a feature to hundreds of millions of users
+- Deliver a feature to hundreds of millions of customers
 
 . . .
 
@@ -81,26 +108,16 @@ Enterprise Architecture
 
 <center>![Mess of cables](./cablemess-2.jpg)</center>
 
-Operational Execution Excellence
+Aligning Business needs and IT capabilities
 -
 
-- Ideal customer impact
-
-. . .
-
-- The customer should only notice exactly what we want
-
-. . .
-
-- Ideally:
-    - No additional loading time
-    - No requirement to logout and login
-
-. . .
-
-- At first we only want a fraction of users to experience the change
-    - Over time we want more and more users to experience the change
-    - If there's a problem we need to instantly disable the change
+> - The essence of the problem has been studied
+> - A non-technical system doesn't exist
+> - IT can prioritize
+>     - Is instantaneous rollout/back more important than no downtime?
+>     - Is a degraded customer experience acceptable for a fraction of customers?
+>     - Should the system designed for mobile release be adapted for web release?
+> - What does the ideal solution for the next 2-3 years look like?
 
 Questions?
 -
